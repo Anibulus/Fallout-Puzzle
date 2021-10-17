@@ -46,7 +46,7 @@ def run():
     print(f'\nEscribe todas las palabras que aparecen en pantalla \n\nEscribe "\\{EXIT.capitalize()}" cuando hayas terminado')
     words_list = []
 
-    get_words_from_user = False
+    get_words_from_user = True
     while get_words_from_user:
         data_input = get_word()
         #Cuando sea el comando de salida, prepara a terminar la ejecución
