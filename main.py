@@ -1,5 +1,3 @@
-import collections
-
 EXIT = 'exit'
 
 def get_num(msj):
@@ -14,43 +12,32 @@ def get_num(msj):
 
 get_word = lambda msj='' : input(msj).lower().strip()
 
-def discard_options(words_list, word):
+def discard_options(words_list, word, likely=0):
     """
-    Encuentra las palabras que contienen la letra para quitarlas de las opciones
+    Recorre la palabra para comparar las letras en sus respectivas posiciones
     """
-    new_list = []
+    passw_posibilities = []
 
-    for letter in word: 
-        for word_on_list in words_list:
-            #Al encontrar una palabra con esa similitud, la elimina
-            if letter in word_on_list:
-                if word_on_list not in new_list:
-                    new_list.append(word_on_list)
 
-    #High order funcions
-    #filter recibe una funcion anonima y un iterable
-    options = list(filter(lambda x : x not in new_list, words_list))
-    #options = [x for x in words_list if x not in new_list]
-    print(options)
-    #Ver Reduce
-    opc = list(map(lambda x : x*2, words_list))
-    print(opc)
+    for passw in words_list:
+        if not passw.__eq__(word):
+            #Search coincidences
+            passw_comparer = zip(passw, word)
+            passw_char = [x for x, z in passw_comparer if x==z]
+            
+            coincidences = len(passw_char)
+            if coincidences == likely:
+                passw_posibilities.append({"password":passw, "coincidences":coincidences, "on_letter":passw_char})
 
-def find_options(words_list, word, likely):
-    """
-    Encuentra las palabras que contienen la letra añadirlas
-    """
-    new_list = []
-
-    for letter in word: 
-        for word_on_list in words_list:
-            #Al encontrar una palabra con esa similitud, la elimina
-            if letter in word_on_list:
-                if word_on_list not in new_list:
-                    new_list.append(word_on_list)
+    print(passw_posibilities)
     
-    options = list(filter(lambda x : x in new_list, words_list))
-    print(options)
+    """
+    filter recibe una funcion anonima y un iterable
+    options = list(filter(lambda x : x not in words_list, words_list))
+    options = [x for x in words_list if x not in new_list]
+    opc = list(map(lambda x : x*2, words_list))
+    Ver Reduce
+    """
 
 
 def run():
@@ -74,17 +61,14 @@ def run():
 
 
     #TODO datos de prueba
-    #words_list=['down', 'upon', 'else', 'love']
-    #print(words_list)
+    words_list=['down', 'upon', 'here', 'stay', 'star', 'block', 'take', 'ride', 'there', ]
+    print(words_list)
     #Una vez terminado el ciclo de captura los intentos
     word = get_word('¿Cuál palabra has intentado?')
     if word in words_list:
-        likely = get_num('Interta la similitud')
-        if likely > 0:
-            find_options(words_list, word, likely)
-        else:
-            #Descarta todas las opciones que contengan sus letras
-            discard_options(words_list, word)
+        likely = get_num('Interta la similitud \t')
+        #Descarta todas las opciones que contengan sus letras
+        discard_options(words_list, word, likely)
     else:
         print('Esa palabra no está agregada')
 
